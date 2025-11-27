@@ -1,54 +1,31 @@
-import Image from "next/image"
 import Header from "./_components/header"
-import { Button } from "./_components/ui/button"
+
 import { Card, CardContent } from "./_components/ui/card"
 import { Badge } from "./_components/ui/badge"
 import { Avatar, AvatarImage } from "./_components/ui/avatar"
+import { db } from "./_lib/prisma"
+import BarbershopItem from "./_components/barbershop-item"
 
-const Home = () => {
+const Home = async () => {
+  //  CHAMAR BANCO DE DADOS
+  const barbershops = await db.barbershop.findMany({})
+
   return (
     <div>
       {/* HEADER */}
       <Header />
-
-      {/* Banner logo */}
-      <div className="relative mt-1 h-[500px] w-full">
-        <Image
-          alt="Agende com LP Barber"
-          src="/logolpofc.jpg"
-          fill
-          className="rounded-xl object-cover"
-        />
-
-        {/* BOTAO AGENDAR */}
-        <Button
-          className="btn-entrando shine-button"
-          style={{
-            position: "absolute",
-            right: "14px",
-            bottom: "33px",
-            padding: "12px 20px",
-            borderRadius: "12px",
-            color: "#FFD700",
-            fontSize: "14px",
-            fontWeight: 600,
-            boxShadow: "0px 4px 10px rgba(0,0,0,0.25)",
-            border: "1.5px solid #FFD700",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            background: "#000000",
-            overflow: "hidden",
-          }}
-        >
-          AGENDAR AGORA
-        </Button>
-      </div>
+      {/* Banner logo + BOTAO */}
+      {barbershops.map((barbershop) => (
+        <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+      ))}
 
       {/* DIV P-5 */}
       <div className="p-5">
         {/* AGENDAMENTO */}
-
-        <Card>
+        <h2 className="text-xs font-bold text-gray-400 uppercase">
+          Agendamentos
+        </h2>
+        <Card className="mt-4">
           <CardContent className="-m-2 flex justify-between p-0">
             {/* ESQUERDA */}
             <div className="flex flex-col gap-2 pl-6">
