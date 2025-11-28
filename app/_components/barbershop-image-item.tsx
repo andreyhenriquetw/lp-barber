@@ -9,7 +9,7 @@ interface BarberShopImageItemProps {
 
 const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
   return (
-    <div className="relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] w-screen px-6 text-center shadow-sm md:px-10">
+    <div className="relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] w-screen px-5 text-center shadow-sm md:px-10">
       <h2 className="mb-4 text-4xl font-bold text-[#FFD700]">Serviços</h2>
 
       <p className="mx-auto max-w-2xl text-base leading-relaxed text-gray-400 md:text-lg">

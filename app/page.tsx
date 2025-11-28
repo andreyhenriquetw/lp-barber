@@ -1,7 +1,5 @@
 import Header from "./_components/header"
 
-import { Card, CardContent } from "./_components/ui/card"
-
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 
@@ -53,18 +51,6 @@ const Home = async () => {
       ))}
 
       {/* FOOTER COM CARD */}
-      <footer>
-        <Card className="mt-5 border-none shadow-none">
-          <CardContent className="flex flex-col items-center gap-1 text-center">
-            <h4 className="text-sm font-semibold text-gray-500">
-              © 2025 LP Barbearia
-            </h4>
-            <p className="text-xs text-gray-400">
-              Todos os direitos reservados
-            </p>
-          </CardContent>
-        </Card>
-      </footer>
     </div>
   )
 }
