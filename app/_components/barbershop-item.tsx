@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Barbershop } from "@prisma/client"
+import Link from "next/link"
 
 interface BarberShopItemProps {
   barbershop: Barbershop
@@ -36,8 +37,9 @@ const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
           background: "#000000",
           overflow: "hidden",
         }}
+        asChild
       >
-        AGENDAR AGORA
+        <Link href={`/barbershops/${barbershop.id}`}>AGENDAR AGORA</Link>
       </Button>
     </div>
   )
