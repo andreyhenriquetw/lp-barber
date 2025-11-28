@@ -1,4 +1,5 @@
 // app/barbershops/[id]/page.tsx
+import ServiceItem from "@/app/_components/service-item"
 import { Button } from "@/app/_components/ui/button"
 import { db } from "@/app/_lib/prisma"
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
@@ -19,6 +20,9 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
   const barbershop = await db.barbershop.findUnique({
     where: {
       id: id, // agora id existe
+    },
+    include: {
+      services: true,
     },
   })
 
@@ -59,10 +63,10 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
       <div className="border-b border-solid p-5">
         {/* IMAGEM + NOME LADO A LADO */}
-        <div className="mb-3 flex items-center gap-3">
-          <div className="relative size-[34px] shrink-0 overflow-hidden rounded-full">
+        <div className="mb-3 flex items-center gap-2">
+          <div className="relative size-[35px] shrink-0 overflow-hidden rounded-full">
             <Image
-              src={barbershop.imageUrl}
+              src="/logolp.png"
               alt={barbershop.name}
               fill
               className="object-cover"
@@ -87,9 +91,21 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
       {/* DESCRIÇÃO */}
 
+      {/* 
       <div className="space-y-3 border-b border-solid p-5">
         <h2 className="text-xs font-bold text-gray-400 uppercase">Sobre nós</h2>
         <p className="text-justify text-sm">{barbershop?.description}</p>
+      </div>
+      */}
+
+      {/* SERVICEITEM */}
+      <div className="space-y-3 p-5">
+        <h2 className="text-xs font-bold text-gray-400 uppercase">Serviços</h2>
+        <div className="space-y-3">
+          {barbershop.services.map((service) => (
+            <ServiceItem key={service.id} service={service} />
+          ))}
+        </div>
       </div>
     </div>
   )
