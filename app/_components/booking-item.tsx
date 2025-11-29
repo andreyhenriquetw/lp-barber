@@ -19,7 +19,7 @@ const BookingItem = () => {
               <h3 className="font-semibold">Corte de Cabelo</h3>
               <div className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarImage src="https://cultura.uol.com.br/webstories/2023/05/como-garantir-uma-barba-bem-feita/assets/5.jpeg" />
+                  <AvatarImage src="/logolp.png" />
                 </Avatar>
                 <p className="text-sm">LP Barbearia</p>
               </div>
