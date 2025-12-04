@@ -10,6 +10,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  
+
  
 
 }
@@ -92,6 +94,7 @@ model BarbershopService {
 model Booking {
   id        String            @id @default(uuid())
   userId    String
+  barber    String 
   user      User              @relation(fields: [userId], references: [id])
   serviceId String
   service   BarbershopService @relation(fields: [serviceId], references: [id])

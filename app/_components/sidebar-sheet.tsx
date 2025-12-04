@@ -4,7 +4,7 @@ import Image from "next/image"
 
 import { Button } from "./ui/button"
 import { CalendarIcon, HomeIcon, LogInIcon } from "lucide-react"
-import { SheetClose, SheetContent, SheetTitle } from "./ui/sheet"
+import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import { quickSearchOptions } from "../_constants/search"
 
 import Link from "next/link"
@@ -26,13 +26,11 @@ const SidebarSheet = () => {
 
   const handleLogoutClick = () => signOut()
 
-  console.log(data?.user)
-
   return (
     <SheetContent className="overflow-y-auto p-0">
-      <div className="px-5 pt-5 pb-0">
+      <SheetHeader className="px-5 pt-5 pb-0">
         <SheetTitle className="text-left">Menu</SheetTitle>
-      </div>
+      </SheetHeader>
 
       <div className="flex items-center justify-between gap-3 border-b border-solid px-5 pt-0 pb-4">
         {data?.user ? (
@@ -51,7 +49,10 @@ const SidebarSheet = () => {
             <h2 className="font-bold">Olá, faça seu login!</h2>
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="icon">
+                <Button
+                  variant="outline"
+                  className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
+                >
                   <LogInIcon />
                 </Button>
               </DialogTrigger>
@@ -104,14 +105,17 @@ const SidebarSheet = () => {
             key={option.title}
             className="justify-start gap-3"
             variant="ghost"
+            asChild
           >
-            <Image
-              alt={option.title}
-              src={option.imageUrl}
-              height={18}
-              width={18}
-            />
-            {option.title}
+            <Link href="/barbershops/32e412f2-314f-41ae-90f1-18ec1929d05b">
+              <Image
+                alt={option.title}
+                src={option.imageUrl}
+                height={18}
+                width={18}
+              />
+              {option.title}
+            </Link>
           </Button>
         ))}
       </div>
