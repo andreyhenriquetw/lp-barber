@@ -48,7 +48,7 @@ const SidebarSheet = () => {
                   <LogInIcon />
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="w-[90%]">
                 <SignInDialog />
               </DialogContent>
             </Dialog>
