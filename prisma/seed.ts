@@ -1,14 +1,14 @@
-import { PrismaClient } from "@/app/generated/prisma/client";
+import { PrismaClient } from "@prisma/client"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function seedDatabase() {
   try {
     const images = [
       "https://cultura.uol.com.br/webstories/2023/05/como-garantir-uma-barba-bem-feita/assets/5.jpeg",
-    ];
-    const creativeNames = ["LP Barbearia"];
-    const addresses = ["Rua da Barbearia, 123, Aeroporto Velho"];
+    ]
+    const creativeNames = ["LP Barbearia"]
+    const addresses = ["Rua da Barbearia, 123, Aeroporto Velho"]
 
     const services = [
       {
@@ -53,7 +53,7 @@ async function seedDatabase() {
         imageUrl:
           "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png",
       },
-    ];
+    ]
 
     // Criar apenas 1 barbearia (ou use o tamanho mínimo dos arrays)
     const barbershop = await prisma.barbershop.create({
@@ -65,7 +65,7 @@ async function seedDatabase() {
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
       },
-    });
+    })
 
     for (const service of services) {
       await prisma.barbershopService.create({
@@ -76,15 +76,15 @@ async function seedDatabase() {
           imageUrl: service.imageUrl,
           barbershop: { connect: { id: barbershop.id } },
         },
-      });
+      })
     }
 
-    console.log("Seed finalizado com sucesso!");
+    console.log("Seed finalizado com sucesso!")
   } catch (error) {
-    console.error("Erro ao criar as barbearias:", error);
+    console.error("Erro ao criar as barbearias:", error)
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }
 
-seedDatabase();
+seedDatabase()
