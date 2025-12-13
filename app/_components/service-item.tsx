@@ -258,7 +258,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
                     {/* SELEÇÃO DE BARBEIRO */}
                     {selectedTime && selectedDay && (
-                      <div className="mt-4 border-b border-solid pb-4">
+                      <div className="mt-3 border-b border-solid pb-4">
                         <div className="mb-3 text-center font-semibold text-gray-400">
                           Selecione o Barbeiro
                         </div>
@@ -334,7 +334,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   </div>
 
                   {/* BOTÃO FIXO EM BAIXO */}
-                  <SheetFooter className="border-t px-5 py-3">
+                  <SheetFooter className="-mt-8 px-5 py-3">
                     <SheetClose asChild>
                       <Button
                         className="w-full"
