@@ -4,13 +4,7 @@ import { BarbershopService, Booking } from "@prisma/client"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetTitle,
-} from "./ui/sheet"
+import { Sheet, SheetClose, SheetContent, SheetTitle } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
 import { useEffect, useMemo, useState } from "react"
@@ -200,7 +194,8 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                 </Button>
 
                 <SheetContent className="flex h-screen w-[80%] flex-col p-0">
-                  <div className="flex-1 overflow-y-auto px-3">
+                  {/* CONTEÚDO */}
+                  <div className="overflow-y-auto px-3 pb-24">
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
@@ -241,7 +236,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                     )}
 
                     {selectedDay && selectedTime && (
-                      <div className="mt-4 pb-4">
+                      <div className="mt-4">
                         <Card className="p-2">
                           <CardContent className="flex flex-col gap-1 p-0">
                             <div className="flex justify-between font-bold">
@@ -273,19 +268,20 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                         </Card>
                       </div>
                     )}
-                  </div>
 
-                  <SheetFooter className="px-5 py-3">
-                    <SheetClose asChild>
-                      <Button
-                        className="w-full"
-                        onClick={handleCreateBooking}
-                        disabled={!selectedDay || !selectedTime}
-                      >
-                        Confirmar
-                      </Button>
-                    </SheetClose>
-                  </SheetFooter>
+                    {/* BOTÃO LOGO ABAIXO */}
+                    <div className="mt-5">
+                      <SheetClose asChild>
+                        <Button
+                          className="w-full"
+                          onClick={handleCreateBooking}
+                          disabled={!selectedDay || !selectedTime}
+                        >
+                          Confirmar
+                        </Button>
+                      </SheetClose>
+                    </div>
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>
