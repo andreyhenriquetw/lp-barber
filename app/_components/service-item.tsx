@@ -200,7 +200,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       Fazer reserva
                     </SheetTitle>
 
-                    <div className="mt-1 border-b pb-3">
+                    <div className="-mx-3 mt-1 border-b pb-3">
                       <Calendar
                         className="w-full"
                         mode="single"
