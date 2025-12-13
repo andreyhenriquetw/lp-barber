@@ -211,122 +211,133 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-screen w-[80%] flex-col overflow-y-auto">
-                  <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
-                    Fazer reserva
-                  </SheetTitle>
+                <SheetContent className="flex h-screen w-[80%] flex-col p-0">
+                  {/* CONTEÚDO DESLIZÁVEL */}
+                  <div className="flex-1 overflow-y-auto px-3">
+                    {/* TÍTULO */}
+                    <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
+                      Fazer reserva
+                    </SheetTitle>
 
-                  <div className="-mt-3 flex flex-col items-center justify-center overflow-y-auto border-b border-solid">
-                    <Calendar
-                      className="w-full max-w-full"
-                      mode="single"
-                      locale={ptBR}
-                      buttonVariant="outline"
-                      selected={selectedDay}
-                      onSelect={handleDateSelect}
-                      disabled={(date) => date < today}
-                    />
-                  </div>
-
-                  {selectedDay && (
-                    <div className="-mt-1 flex gap-2 overflow-x-auto border-b border-solid px-3 pb-3 [&::-webkit-scrollbar]:hidden">
-                      {timeList.length > 0 ? (
-                        timeList.map((time) => (
-                          <Button
-                            key={time}
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            className="rounded-full"
-                            onClick={() => handleTimeSelect(time)}
-                          >
-                            {time}
-                          </Button>
-                        ))
-                      ) : (
-                        <p className="text-xs">
-                          Não há horários disponíveis para este dia.
-                        </p>
-                      )}
+                    {/* CALENDÁRIO */}
+                    <div className="mt-1 flex flex-col items-center justify-center border-b border-solid pb-3">
+                      <Calendar
+                        className="w-full max-w-full"
+                        mode="single"
+                        locale={ptBR}
+                        buttonVariant="outline"
+                        selected={selectedDay}
+                        onSelect={handleDateSelect}
+                        disabled={(date) => date < today}
+                      />
                     </div>
-                  )}
 
-                  {/* --- BARBEIROS AQUI --- */}
-                  {selectedTime && selectedDay && (
-                    <div className="-mt-2 items-center border-b border-solid px-3 pb-4">
-                      <div className="mb-3 text-center font-semibold text-gray-400">
-                        Selecione o Barbeiro
-                      </div>
-
-                      <div className="flex justify-center overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                        <div className="flex gap-2">
-                          {BARBER_LIST.map((barber) => (
+                    {/* SELEÇÃO DE HORÁRIOS */}
+                    {selectedDay && (
+                      <div className="mt-4 flex gap-2 overflow-x-auto border-b border-solid pb-3 [&::-webkit-scrollbar]:hidden">
+                        {timeList.length > 0 ? (
+                          timeList.map((time) => (
                             <Button
-                              key={barber}
+                              key={time}
                               variant={
-                                selectedBarber === barber
-                                  ? "default"
-                                  : "outline"
+                                selectedTime === time ? "default" : "outline"
                               }
-                              className="rounded-full px-4 py-1 text-xs"
-                              onClick={() => handleBarberSelect(barber)}
+                              className="rounded-full"
+                              onClick={() => handleTimeSelect(time)}
                             >
-                              {barber}
+                              {time}
                             </Button>
-                          ))}
+                          ))
+                        ) : (
+                          <p className="text-xs">
+                            Não há horários disponíveis para este dia.
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* SELEÇÃO DE BARBEIRO */}
+                    {selectedTime && selectedDay && (
+                      <div className="mt-4 border-b border-solid pb-4">
+                        <div className="mb-3 text-center font-semibold text-gray-400">
+                          Selecione o Barbeiro
+                        </div>
+
+                        <div className="flex justify-center overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                          <div className="flex gap-2">
+                            {BARBER_LIST.map((barber) => (
+                              <Button
+                                key={barber}
+                                variant={
+                                  selectedBarber === barber
+                                    ? "default"
+                                    : "outline"
+                                }
+                                className="rounded-full px-4 py-1 text-xs"
+                                onClick={() => handleBarberSelect(barber)}
+                              >
+                                {barber}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {selectedTime && selectedDay && selectedBarber && (
-                    <div className="px-4">
-                      <Card className="p-2">
-                        <CardContent className="flex flex-col space-y-1 p-0">
-                          <div className="flex items-center justify-between">
-                            <h2 className="pl-1 font-bold">{service.name}</h2>
-                            <p className="text-[#FFD700]">
-                              {Intl.NumberFormat("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                              }).format(Number(service.price))}
-                            </p>
-                          </div>
+                    {/* RESUMO DA RESERVA */}
+                    {selectedTime && selectedDay && selectedBarber && (
+                      <div className="mt-4 px-1 pb-4">
+                        <Card className="p-2">
+                          <CardContent className="flex flex-col space-y-1 p-0">
+                            <div className="flex items-center justify-between">
+                              <h2 className="pl-1 font-bold">{service.name}</h2>
+                              <p className="text-[#FFD700]">
+                                {Intl.NumberFormat("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                }).format(Number(service.price))}
+                              </p>
+                            </div>
 
-                          <div className="mt-1 flex items-center justify-between">
-                            <h2 className="pl-1 text-sm text-gray-400">Data</h2>
-                            <p className="text-sm text-[#FFD700]">
-                              {format(selectedDay, "d 'de' MMMM", {
-                                locale: ptBR,
-                              })}
-                            </p>
-                          </div>
+                            <div className="mt-1 flex items-center justify-between">
+                              <h2 className="pl-1 text-sm text-gray-400">
+                                Data
+                              </h2>
+                              <p className="text-sm text-[#FFD700]">
+                                {format(selectedDay, "d 'de' MMMM", {
+                                  locale: ptBR,
+                                })}
+                              </p>
+                            </div>
 
-                          <div className="mt-1 flex items-center justify-between">
-                            <h2 className="pl-1 text-sm text-gray-400">
-                              Horário
-                            </h2>
-                            <p className="text-sm text-[#FFD700]">
-                              {selectedTime}
-                            </p>
-                          </div>
+                            <div className="mt-1 flex items-center justify-between">
+                              <h2 className="pl-1 text-sm text-gray-400">
+                                Horário
+                              </h2>
+                              <p className="text-sm text-[#FFD700]">
+                                {selectedTime}
+                              </p>
+                            </div>
 
-                          <div className="mt-1 flex items-center justify-between">
-                            <h2 className="pl-1 text-sm text-gray-400">
-                              Barbeiro
-                            </h2>
-                            <p className="text-sm text-[#FFD700]">
-                              {selectedBarber}
-                            </p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
+                            <div className="mt-1 flex items-center justify-between">
+                              <h2 className="pl-1 text-sm text-gray-400">
+                                Barbeiro
+                              </h2>
+                              <p className="text-sm text-[#FFD700]">
+                                {selectedBarber}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    )}
+                  </div>
 
-                  <SheetFooter className="-mt-4 px-5">
+                  {/* BOTÃO FIXO EM BAIXO */}
+                  <SheetFooter className="border-t px-5 py-3">
                     <SheetClose asChild>
                       <Button
+                        className="w-full"
                         onClick={handleCreateBooking}
                         disabled={
                           !selectedDay || !selectedTime || !selectedBarber
