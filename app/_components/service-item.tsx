@@ -55,8 +55,6 @@ const TIME_LIST = [
 const today = new Date()
 today.setHours(0, 0, 0, 0)
 
-const BARBER_LIST = ["Douglas", "Fernando", "Henrique"]
-
 interface GetTimeListProps {
   bookings: Booking[]
   selectedDay: Date
@@ -81,25 +79,18 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
     if (hasBookingOnCurrentTime) {
       return false
     }
+
     return true
   })
 }
 
 const ServiceItem = ({ service }: ServiceItemProps) => {
   const [signInDiaLogIsOpen, setSignInDialogIsOpen] = useState(false)
-
   const { data } = useSession()
 
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
-  const [selectedTime, setSelectedTime] = useState<string | undefined>(
-    undefined,
-  )
-  const [selectedBarber, setSelectedBarber] = useState<string | undefined>(
-    undefined,
-  )
-
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>()
+  const [selectedTime, setSelectedTime] = useState<string | undefined>()
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
-
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
   useEffect(() => {
@@ -116,9 +107,10 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
   const handleBookingClick = () => {
     if (data?.user) {
-      return setBookingSheetIsOpen(true)
+      setBookingSheetIsOpen(true)
+    } else {
+      setSignInDialogIsOpen(true)
     }
-    return setSignInDialogIsOpen(true)
   }
 
   const handleBookingSheetOpenChange = () => {
@@ -136,26 +128,22 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
     setSelectedTime(time)
   }
 
-  const handleBarberSelect = (barber: string | undefined) => {
-    setSelectedBarber(barber)
-  }
-
   const handleCreateBooking = async () => {
     try {
-      if (!selectedDay || !selectedTime || !selectedBarber) return
+      if (!selectedDay || !selectedTime) return
 
       const hour = Number(selectedTime.split(":")[0])
       const minute = Number(selectedTime.split(":")[1])
+
       const newDate = set(selectedDay, {
-        minutes: minute,
         hours: hour,
+        minutes: minute,
       })
 
       await createBooking({
         serviceId: service.id,
         userId: service.id,
         date: newDate,
-        barber: selectedBarber,
       })
 
       handleBookingSheetOpenChange()
@@ -178,7 +166,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
     <>
       <Card className="py-3">
         <CardContent className="flex items-center gap-3 px-3">
-          <div className="relative max-h-[110px] min-h-[110px] max-w-[110px] min-w-[110px]">
+          <div className="relative h-[110px] w-[110px]">
             <Image
               alt={service.name}
               src={service.imageUrl}
@@ -212,17 +200,14 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                 </Button>
 
                 <SheetContent className="flex h-screen w-[80%] flex-col p-0">
-                  {/* CONTEÚDO DESLIZÁVEL */}
                   <div className="flex-1 overflow-y-auto px-3">
-                    {/* TÍTULO */}
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
 
-                    {/* CALENDÁRIO */}
-                    <div className="mt-1 flex flex-col items-center justify-center border-b border-solid pb-3">
+                    <div className="mt-1 border-b pb-3">
                       <Calendar
-                        className="w-full max-w-full"
+                        className="w-full"
                         mode="single"
                         locale={ptBR}
                         buttonVariant="outline"
@@ -232,9 +217,8 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       />
                     </div>
 
-                    {/* SELEÇÃO DE HORÁRIOS */}
                     {selectedDay && (
-                      <div className="mt-4 flex gap-2 overflow-x-auto border-b border-solid pb-3 [&::-webkit-scrollbar]:hidden">
+                      <div className="mt-4 flex gap-2 overflow-x-auto border-b pb-3 [&::-webkit-scrollbar]:hidden">
                         {timeList.length > 0 ? (
                           timeList.map((time) => (
                             <Button
@@ -256,76 +240,34 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       </div>
                     )}
 
-                    {/* SELEÇÃO DE BARBEIRO */}
-                    {selectedTime && selectedDay && (
-                      <div className="mt-3 border-b border-solid pb-4">
-                        <div className="mb-3 text-center font-semibold text-gray-400">
-                          Selecione o Barbeiro
-                        </div>
-
-                        <div className="flex justify-center overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                          <div className="flex gap-2">
-                            {BARBER_LIST.map((barber) => (
-                              <Button
-                                key={barber}
-                                variant={
-                                  selectedBarber === barber
-                                    ? "default"
-                                    : "outline"
-                                }
-                                className="rounded-full px-4 py-1 text-xs"
-                                onClick={() => handleBarberSelect(barber)}
-                              >
-                                {barber}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* RESUMO DA RESERVA */}
-                    {selectedTime && selectedDay && selectedBarber && (
-                      <div className="mt-4 px-1 pb-4">
+                    {selectedDay && selectedTime && (
+                      <div className="mt-4 pb-4">
                         <Card className="p-2">
-                          <CardContent className="flex flex-col space-y-1 p-0">
-                            <div className="flex items-center justify-between">
-                              <h2 className="pl-1 font-bold">{service.name}</h2>
-                              <p className="text-[#FFD700]">
+                          <CardContent className="flex flex-col gap-1 p-0">
+                            <div className="flex justify-between font-bold">
+                              <span>{service.name}</span>
+                              <span className="text-[#FFD700]">
                                 {Intl.NumberFormat("pt-BR", {
                                   style: "currency",
                                   currency: "BRL",
                                 }).format(Number(service.price))}
-                              </p>
+                              </span>
                             </div>
 
-                            <div className="mt-1 flex items-center justify-between">
-                              <h2 className="pl-1 text-sm text-gray-400">
-                                Data
-                              </h2>
-                              <p className="text-sm text-[#FFD700]">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Data</span>
+                              <span className="text-[#FFD700]">
                                 {format(selectedDay, "d 'de' MMMM", {
                                   locale: ptBR,
                                 })}
-                              </p>
+                              </span>
                             </div>
 
-                            <div className="mt-1 flex items-center justify-between">
-                              <h2 className="pl-1 text-sm text-gray-400">
-                                Horário
-                              </h2>
-                              <p className="text-sm text-[#FFD700]">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Horário</span>
+                              <span className="text-[#FFD700]">
                                 {selectedTime}
-                              </p>
-                            </div>
-
-                            <div className="mt-1 flex items-center justify-between">
-                              <h2 className="pl-1 text-sm text-gray-400">
-                                Barbeiro
-                              </h2>
-                              <p className="text-sm text-[#FFD700]">
-                                {selectedBarber}
-                              </p>
+                              </span>
                             </div>
                           </CardContent>
                         </Card>
@@ -333,15 +275,12 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                     )}
                   </div>
 
-                  {/* BOTÃO FIXO EM BAIXO */}
-                  <SheetFooter className="-mt-8 px-5 py-3">
+                  <SheetFooter className="px-5 py-3">
                     <SheetClose asChild>
                       <Button
                         className="w-full"
                         onClick={handleCreateBooking}
-                        disabled={
-                          !selectedDay || !selectedTime || !selectedBarber
-                        }
+                        disabled={!selectedDay || !selectedTime}
                       >
                         Confirmar
                       </Button>
