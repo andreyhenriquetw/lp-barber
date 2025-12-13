@@ -211,12 +211,12 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-screen w-[80%] flex-col">
-                  <SheetTitle className="mt-3 text-center font-bold text-[#FFD700]">
+                <SheetContent className="flex h-screen w-[80%] flex-col overflow-y-auto">
+                  <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                     Fazer reserva
                   </SheetTitle>
 
-                  <div className="flex flex-col items-center justify-center overflow-y-auto border-b border-solid">
+                  <div className="-mt-3 flex flex-col items-center justify-center overflow-y-auto border-b border-solid">
                     <Calendar
                       className="w-full max-w-full"
                       mode="single"
@@ -324,7 +324,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                     </div>
                   )}
 
-                  <SheetFooter className="px-5">
+                  <SheetFooter className="-mt-4 px-5">
                     <SheetClose asChild>
                       <Button
                         onClick={handleCreateBooking}

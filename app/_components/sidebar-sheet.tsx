@@ -82,7 +82,7 @@ const SidebarSheet = () => {
             variant="ghost"
             asChild
           >
-            <Link href="/barbershops/97033e3d-fc4c-44c5-a212-48a28b1d8e3c">
+            <Link href="/barbershops/3afa7454-65c0-4101-869f-8fcce38f384c">
               <Image
                 alt={option.title}
                 src={option.imageUrl}
