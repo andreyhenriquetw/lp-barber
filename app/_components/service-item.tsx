@@ -4,13 +4,7 @@ import { BarbershopService, Booking } from "@prisma/client"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetTitle,
-} from "./ui/sheet"
+import { Sheet, SheetClose, SheetContent, SheetTitle } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
 import { useEffect, useMemo, useState } from "react"
@@ -211,18 +205,17 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-screen w-[80%] flex-col p-0">
-                  {/* CONTEÚDO DESLIZÁVEL */}
-                  <div className="flex-1 overflow-y-auto px-3">
-                    {/* TÍTULO */}
-                    <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
+                <SheetContent className="relative h-screen w-[80%] p-0">
+                  {/* CONTEÚDO COM SCROLL */}
+                  <div className="h-full overflow-y-auto px-3 pb-24">
+                    <SheetTitle className="mt-4 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
 
                     {/* CALENDÁRIO */}
-                    <div className="mt-1 flex flex-col items-center justify-center border-b border-solid pb-3">
+                    <div className="mt-4 border-b pb-3">
                       <Calendar
-                        className="w-full max-w-full"
+                        className="w-full"
                         mode="single"
                         locale={ptBR}
                         buttonVariant="outline"
@@ -232,9 +225,9 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       />
                     </div>
 
-                    {/* SELEÇÃO DE HORÁRIOS */}
+                    {/* HORÁRIOS */}
                     {selectedDay && (
-                      <div className="mt-4 flex gap-2 overflow-x-auto border-b border-solid pb-3 [&::-webkit-scrollbar]:hidden">
+                      <div className="mt-4 flex gap-2 overflow-x-auto border-b pb-3 [&::-webkit-scrollbar]:hidden">
                         {timeList.length > 0 ? (
                           timeList.map((time) => (
                             <Button
@@ -242,7 +235,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                               variant={
                                 selectedTime === time ? "default" : "outline"
                               }
-                              className="rounded-full"
+                              className="shrink-0 rounded-full"
                               onClick={() => handleTimeSelect(time)}
                             >
                               {time}
@@ -250,15 +243,15 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                           ))
                         ) : (
                           <p className="text-xs">
-                            Não há horários disponíveis para este dia.
+                            Não há horários disponíveis.
                           </p>
                         )}
                       </div>
                     )}
 
-                    {/* SELEÇÃO DE BARBEIRO */}
+                    {/* BARBEIROS */}
                     {selectedTime && selectedDay && (
-                      <div className="mt-3 border-b border-solid pb-4">
+                      <div className="mt-4 border-b pb-4">
                         <div className="mb-3 text-center font-semibold text-gray-400">
                           Selecione o Barbeiro
                         </div>
@@ -273,7 +266,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                                     ? "default"
                                     : "outline"
                                 }
-                                className="rounded-full px-4 py-1 text-xs"
+                                className="shrink-0 rounded-full px-4 py-1 text-xs"
                                 onClick={() => handleBarberSelect(barber)}
                               >
                                 {barber}
@@ -284,48 +277,42 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       </div>
                     )}
 
-                    {/* RESUMO DA RESERVA */}
+                    {/* RESUMO */}
                     {selectedTime && selectedDay && selectedBarber && (
-                      <div className="mt-4 px-1 pb-4">
-                        <Card className="p-2">
-                          <CardContent className="flex flex-col space-y-1 p-0">
-                            <div className="flex items-center justify-between">
-                              <h2 className="pl-1 font-bold">{service.name}</h2>
-                              <p className="text-[#FFD700]">
+                      <div className="mt-4">
+                        <Card>
+                          <CardContent className="flex flex-col gap-1 p-2">
+                            <div className="flex justify-between font-bold">
+                              <span>{service.name}</span>
+                              <span className="text-[#FFD700]">
                                 {Intl.NumberFormat("pt-BR", {
                                   style: "currency",
                                   currency: "BRL",
                                 }).format(Number(service.price))}
-                              </p>
+                              </span>
                             </div>
 
-                            <div className="mt-1 flex items-center justify-between">
-                              <h2 className="pl-1 text-sm text-gray-400">
-                                Data
-                              </h2>
-                              <p className="text-sm text-[#FFD700]">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Data</span>
+                              <span className="text-[#FFD700]">
                                 {format(selectedDay, "d 'de' MMMM", {
                                   locale: ptBR,
                                 })}
-                              </p>
+                              </span>
                             </div>
 
-                            <div className="mt-1 flex items-center justify-between">
-                              <h2 className="pl-1 text-sm text-gray-400">
-                                Horário
-                              </h2>
-                              <p className="text-sm text-[#FFD700]">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Horário</span>
+                              <span className="text-[#FFD700]">
                                 {selectedTime}
-                              </p>
+                              </span>
                             </div>
 
-                            <div className="mt-1 flex items-center justify-between">
-                              <h2 className="pl-1 text-sm text-gray-400">
-                                Barbeiro
-                              </h2>
-                              <p className="text-sm text-[#FFD700]">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Barbeiro</span>
+                              <span className="text-[#FFD700]">
                                 {selectedBarber}
-                              </p>
+                              </span>
                             </div>
                           </CardContent>
                         </Card>
@@ -333,8 +320,8 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                     )}
                   </div>
 
-                  {/* BOTÃO FIXO EM BAIXO */}
-                  <SheetFooter className="-mt-8 px-5 py-3">
+                  {/* BOTÃO FIXO REAL */}
+                  <div className="bg-background fixed bottom-0 left-0 w-[80%] border-t px-4 py-3">
                     <SheetClose asChild>
                       <Button
                         className="w-full"
@@ -346,7 +333,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                         Confirmar
                       </Button>
                     </SheetClose>
-                  </SheetFooter>
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>
