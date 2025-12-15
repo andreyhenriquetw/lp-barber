@@ -6,19 +6,28 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../_lib/auth"
 
 interface CreateBookingParams {
-  userId: string
   serviceId: string
   date: Date
 }
 
-export const createBooking = async (params: CreateBookingParams) => {
-  const user = await getServerSession(authOptions)
-  if (!user) {
+export const createBooking = async ({
+  serviceId,
+  date,
+}: CreateBookingParams) => {
+  const session = await getServerSession(authOptions)
+
+  if (!session?.user?.id) {
     throw new Error("Usuário não autenticado")
   }
+
   await db.booking.create({
-    data: params,
+    data: {
+      userId: session.user.id,
+      serviceId,
+      date,
+    },
   })
+
   revalidatePath("/barbershops/[id]")
   revalidatePath("/bookings")
 }

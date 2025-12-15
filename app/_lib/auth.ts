@@ -15,13 +15,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, user }) {
-      session.user = {
-        ...session.user,
-        id: user.id,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any
+      if (session.user) {
+        session.user.id = user.id
+      }
       return session
     },
   },
+
   secret: process.env.NEXT_AUTH_SECRET,
 }
