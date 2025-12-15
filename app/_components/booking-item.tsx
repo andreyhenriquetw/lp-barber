@@ -156,11 +156,6 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                   {format(booking.date, "HH:mm", { locale: ptBR })}
                 </p>
               </div>
-
-              <div className="mt-1 flex items-center justify-between">
-                <h2 className="pl-1 text-sm text-gray-400">Barbeiro</h2>
-                <p className="text-sm text-[#FFD700]">{booking.barber}</p>
-              </div>
             </CardContent>
           </Card>
 
