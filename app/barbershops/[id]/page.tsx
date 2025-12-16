@@ -71,7 +71,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
       <div className="border-b border-solid p-5">
         {/* IMAGEM + NOME LADO A LADO */}
-        <div className="mb-3 flex items-center gap-2">
+        <div className="-mt-1 mb-3 flex items-center gap-2">
           <div className="relative size-[35px] shrink-0 overflow-hidden rounded-full">
             <Image
               src="/logolp.png"
@@ -111,7 +111,10 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         <h2 className="text-xs font-bold text-gray-400 uppercase">Serviços</h2>
         <div className="space-y-3">
           {barbershop.services.map((service) => (
-            <ServiceItem key={service.id} service={service} />
+            <ServiceItem
+              key={service.id}
+              service={JSON.parse(JSON.stringify(service))}
+            />
           ))}
         </div>
       </div>
