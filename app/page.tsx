@@ -69,16 +69,20 @@ const Home = async () => {
         <BarbershopItem key={barbershop.id} barbershop={barbershop} />
       ))}
 
-      <h2 className="mt-5 ml-3 text-xs font-bold text-gray-400 uppercase">
-        Agendamentos
-      </h2>
+      {confirmedBookings.length > 0 && (
+        <>
+          <h2 className="mt-4 ml-3 text-xs font-bold text-gray-400 uppercase">
+            Agendamentos
+          </h2>
 
-      {/* AGENDAMNTOS - DIV P-5  */}
-      <div className="ml-3 flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-        {confirmedBookings.map((booking) => (
-          <BookingItem key={booking.id} booking={booking} />
-        ))}
-      </div>
+          {/* AGENDAMNTOS - DIV P-5  */}
+          <div className="ml-3 flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            {confirmedBookings.map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
+          </div>
+        </>
+      )}
 
       {/* TEXT SERVIÇOS AND IMAGE, PREÇOS + BOTÃO */}
       <div className="mt-3">

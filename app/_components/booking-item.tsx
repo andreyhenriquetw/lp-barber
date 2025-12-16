@@ -67,7 +67,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
-      <SheetTrigger className="w-full">
+      <SheetTrigger className="min-w-[97%]">
         <Card className="mt-3 min-w-[90%]">
           <CardContent className="-m-2 flex justify-between p-0">
             {/* ESQUERDA */}
