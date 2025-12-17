@@ -8,13 +8,14 @@ import { Sheet, SheetClose, SheetContent, SheetTitle } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
 import { useEffect, useMemo, useState } from "react"
-import { format, isPast, set } from "date-fns"
+import { isPast, set } from "date-fns"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 import { getBookings } from "../_actions/get-bookings"
 import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
+import BookingSummary from "./booking-summary"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -99,6 +100,14 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
     fetch()
   }, [selectedDay, service.id])
 
+  const selectedDate = useMemo(() => {
+    if (!selectedDay || !selectedTime) return
+    return set(selectedDay, {
+      hours: Number(selectedTime?.split(":")[0]),
+      minutes: Number(selectedTime?.split(":")[1]),
+    })
+  }, [selectedDay, selectedTime])
+
   const handleBookingClick = () => {
     if (data?.user) {
       setBookingSheetIsOpen(true)
@@ -124,19 +133,11 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
   const handleCreateBooking = async () => {
     try {
-      if (!selectedDay || !selectedTime) return
-
-      const hour = Number(selectedTime.split(":")[0])
-      const minute = Number(selectedTime.split(":")[1])
-
-      const newDate = set(selectedDay, {
-        hours: hour,
-        minutes: minute,
-      })
+      if (!selectedDay) return
 
       await createBooking({
         serviceId: service.id,
-        date: newDate,
+        date: selectedDay,
       })
 
       handleBookingSheetOpenChange()
@@ -234,37 +235,12 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       </div>
                     )}
 
-                    {selectedDay && selectedTime && (
+                    {selectedDate && (
                       <div className="mt-4">
-                        <Card className="p-2">
-                          <CardContent className="flex flex-col gap-1 p-0">
-                            <div className="flex justify-between font-bold">
-                              <span>{service.name}</span>
-                              <span className="text-[#FFD700]">
-                                {Intl.NumberFormat("pt-BR", {
-                                  style: "currency",
-                                  currency: "BRL",
-                                }).format(Number(service.price))}
-                              </span>
-                            </div>
-
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-400">Data</span>
-                              <span className="text-[#FFD700]">
-                                {format(selectedDay, "d 'de' MMMM", {
-                                  locale: ptBR,
-                                })}
-                              </span>
-                            </div>
-
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-400">Horário</span>
-                              <span className="text-[#FFD700]">
-                                {selectedTime}
-                              </span>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <BookingSummary
+                          service={service}
+                          selectedDate={selectedDate}
+                        />
                       </div>
                     )}
 

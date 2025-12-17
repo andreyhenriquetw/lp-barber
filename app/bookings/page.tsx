@@ -53,6 +53,9 @@ const Bookings = async () => {
       <Header />
       <div className="p-5">
         <h1 className="-mt-2 text-xl font-bold">Agendamentos</h1>
+        {confirmedBookings.length === 0 && concludedBookings.length === 0 && (
+          <p className="text-gray-400">Você ainda não tem agendamentos.</p>
+        )}
         {confirmedBookings.length > 0 && (
           <>
             <h2 className="mt-4 text-xs font-bold text-gray-400 uppercase">
