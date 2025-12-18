@@ -199,65 +199,69 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="h-dvh w-[80%] overflow-y-auto p-0">
-                  <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
-                    Fazer reserva
-                  </SheetTitle>
+                <SheetContent className="flex h-screen w-[80%] flex-col p-0">
+                  {/* CONTEÚDO */}
+                  <div className="px-3 pb-24">
+                    <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
+                      Fazer reserva
+                    </SheetTitle>
 
-                  <div className="-mx-3 mt-1 border-b px-3 pb-3">
-                    <Calendar
-                      className="w-full"
-                      mode="single"
-                      locale={ptBR}
-                      buttonVariant="outline"
-                      selected={selectedDay}
-                      onSelect={handleDateSelect}
-                      disabled={(date) => date < today}
-                    />
-                  </div>
-
-                  {selectedDay && (
-                    <div className="mt-4 flex gap-2 overflow-x-auto border-b px-3 pb-3 [&::-webkit-scrollbar]:hidden">
-                      {timeList.length > 0 ? (
-                        timeList.map((time) => (
-                          <Button
-                            key={time}
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            className="shrink-0 rounded-full"
-                            onClick={() => handleTimeSelect(time)}
-                          >
-                            {time}
-                          </Button>
-                        ))
-                      ) : (
-                        <p className="text-xs">
-                          Não há horários disponíveis para este dia.
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  {selectedDate && (
-                    <div className="mt-4 px-3">
-                      <BookingSummary
-                        service={service}
-                        selectedDate={selectedDate}
+                    <div className="-mx-3 mt-1 pb-3">
+                      <Calendar
+                        className="w-full"
+                        mode="single"
+                        locale={ptBR}
+                        buttonVariant="outline"
+                        selected={selectedDay}
+                        onSelect={handleDateSelect}
+                        disabled={(date) => date < today}
                       />
                     </div>
-                  )}
 
-                  <div className="mt-5 px-3 pb-6">
-                    <SheetClose asChild>
-                      <Button
-                        className="w-full"
-                        onClick={handleCreateBooking}
-                        disabled={!selectedDay || !selectedTime}
-                      >
-                        Confirmar
-                      </Button>
-                    </SheetClose>
+                    {selectedDay && (
+                      <div className="mt-4 flex gap-2 overflow-x-auto pb-3 [&::-webkit-scrollbar]:hidden">
+                        {timeList.length > 0 ? (
+                          timeList.map((time) => (
+                            <Button
+                              key={time}
+                              variant={
+                                selectedTime === time ? "default" : "outline"
+                              }
+                              className="rounded-full"
+                              onClick={() => handleTimeSelect(time)}
+                            >
+                              {time}
+                            </Button>
+                          ))
+                        ) : (
+                          <p className="text-xs">
+                            Não há horários disponíveis para este dia.
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {selectedDate && (
+                      <div className="mt-4">
+                        <BookingSummary
+                          service={service}
+                          selectedDate={selectedDate}
+                        />
+                      </div>
+                    )}
+
+                    {/* BOTÃO LOGO ABAIXO */}
+                    <div className="mt-5">
+                      <SheetClose asChild>
+                        <Button
+                          className="w-full"
+                          onClick={handleCreateBooking}
+                          disabled={!selectedDay || !selectedTime}
+                        >
+                          Confirmar
+                        </Button>
+                      </SheetClose>
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>
