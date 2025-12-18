@@ -201,12 +201,12 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
                 <SheetContent className="flex h-screen w-[80%] flex-col p-0">
                   {/* CONTEÚDO */}
-                  <div className="px-3 pb-24">
+                  <div className="overflow-y-auto px-3 pb-24">
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
 
-                    <div className="-mx-3 mt-1 pb-3">
+                    <div className="-mx-3 mt-1 border-b pb-3">
                       <Calendar
                         className="w-full"
                         mode="single"
@@ -219,7 +219,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                     </div>
 
                     {selectedDay && (
-                      <div className="mt-4 flex gap-2 overflow-x-auto pb-3 [&::-webkit-scrollbar]:hidden">
+                      <div className="mt-4 flex gap-2 overflow-x-auto border-b pb-3 [&::-webkit-scrollbar]:hidden">
                         {timeList.length > 0 ? (
                           timeList.map((time) => (
                             <Button
