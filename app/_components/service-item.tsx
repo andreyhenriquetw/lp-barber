@@ -199,9 +199,9 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-screen w-[80%] flex-col p-0">
+                <SheetContent className="flex h-dvh w-[80%] flex-col p-0">
                   {/* CONTEÚDO */}
-                  <div className="overflow-y-auto px-3 pb-24">
+                  <div className="flex-1 overflow-y-auto px-3 pb-24">
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
@@ -227,7 +227,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                               variant={
                                 selectedTime === time ? "default" : "outline"
                               }
-                              className="rounded-full"
+                              className="shrink-0 rounded-full"
                               onClick={() => handleTimeSelect(time)}
                             >
                               {time}
@@ -250,7 +250,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       </div>
                     )}
 
-                    {/* BOTÃO LOGO ABAIXO */}
+                    {/* BOTÃO */}
                     <div className="mt-5">
                       <SheetClose asChild>
                         <Button
