@@ -199,16 +199,15 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-screen w-[80%] flex-col p-0">
-                  {/* CONTEÚDO */}
-                  <div className="overflow-y-auto px-3 pb-24">
+                <SheetContent className="flex max-h-[100dvh] w-[80%] flex-col p-0">
+                  <div className="overflow-y-auto px-3 pb-24 [-webkit-overflow-scrolling:touch]">
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
 
-                    <div className="-mx-3 mt-1 border-b pb-3">
+                    <div className="mt-1 border-b pb-3">
                       <Calendar
-                        className="w-full"
+                        className="w-full overflow-hidden"
                         mode="single"
                         locale={ptBR}
                         buttonVariant="outline"
@@ -250,7 +249,6 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                       </div>
                     )}
 
-                    {/* BOTÃO LOGO ABAIXO */}
                     <div className="mt-5">
                       <SheetClose asChild>
                         <Button
