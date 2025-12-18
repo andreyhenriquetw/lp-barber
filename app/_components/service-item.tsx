@@ -207,7 +207,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
                     <div className="mt-1 border-b pb-3">
                       <Calendar
-                        className="w-full overflow-hidden"
+                        className="w-full origin-top scale-[1.05] overflow-hidden"
                         mode="single"
                         locale={ptBR}
                         buttonVariant="outline"
