@@ -134,11 +134,11 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
   const handleCreateBooking = async () => {
     try {
-      if (!selectedDay) return
+      if (!selectedDate) return
 
       await createBooking({
         serviceId: service.id,
-        date: selectedDay,
+        date: selectedDate,
       })
 
       handleBookingSheetOpenChange()
