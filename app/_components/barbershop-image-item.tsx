@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { Button } from "./ui/button"
 import { Barbershop } from "@prisma/client"
 import Link from "next/link"
@@ -19,11 +18,13 @@ const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
 
       {/* IMAGEM E PREÇOS */}
       <div className="relative mt-5 h-[500px] w-full overflow-hidden rounded-2xl shadow-2xl">
-        <Image
-          src="/bannerlp2.jpg"
-          alt="Banner"
-          fill
-          className="object-cover"
+        <video
+          src="/banerbar.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
         />
 
         {/* BLOCO DO TÍTULO + LISTA DE PREÇOS SOBRE A IMAGEM */}
@@ -42,7 +43,7 @@ const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
           </h2>
 
           {/* LISTA DE PREÇOS */}
-          <div className="grid w-full max-w-4xl grid-cols-1 gap-4 text-lg font-semibold text-gray-400 md:grid-cols-2">
+          <div className="gap- grid w-full max-w-4xl grid-cols-1 text-lg font-semibold text-white md:grid-cols-2">
             <div className="space-y-8">
               <div className="flex items-center justify-between border-b border-white/40 pb-2">
                 <span>CORTE</span>
