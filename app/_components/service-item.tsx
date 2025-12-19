@@ -199,7 +199,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex max-h-[100dvh] w-[80%] flex-col p-0">
+                <SheetContent className="flex max-h-dvh w-[84%] flex-col p-0">
                   <div className="overflow-y-auto px-3 pb-24 [-webkit-overflow-scrolling:touch]">
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
