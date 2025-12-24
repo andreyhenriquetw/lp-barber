@@ -206,3 +206,21 @@ body {
 .font-plus-jakarta {
   font-family: var(--font-plus-jakarta);
 }
+
+/* Scroll reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(80px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-200 {
+  transition-delay: 0.2s;
+}

@@ -1,3 +1,6 @@
+"use client"
+
+import { useScrollReveal } from "@/app/_components/useScrollReveal"
 import { Button } from "./ui/button"
 import { Barbershop } from "@prisma/client"
 import Link from "next/link"
@@ -6,7 +9,12 @@ interface BarberShopImageItemProps {
   barbershop: Barbershop
 }
 
-const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
+export default function BarbershopItem({
+  barbershop,
+}: BarberShopImageItemProps) {
+  const titleRef = useScrollReveal()
+  const listRef = useScrollReveal()
+
   return (
     <div className="relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] w-screen px-5 text-center shadow-sm md:px-10">
       <h2 className="mb-4 text-4xl font-bold text-[#FFD700]">Serviços</h2>
@@ -27,59 +35,48 @@ const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        {/* BLOCO DO TÍTULO + LISTA DE PREÇOS SOBRE A IMAGEM */}
+        {/* OVERLAY */}
         <div
           className="absolute inset-0 flex flex-col items-center justify-center px-5 py-10 text-white md:px-16"
-          style={{
-            background: "rgba(0,0,0,0.5)", // leve escurecimento para destacar o texto
-          }}
+          style={{ background: "rgba(0,0,0,0.5)" }}
         >
-          {/* TÍTULO */}
+          {/* TÍTULO COM ANIMAÇÃO */}
           <h2
-            className="mb-7 text-center text-2xl font-extrabold tracking-wide md:text-4xl"
+            ref={titleRef}
+            className="reveal mb-7 text-center text-2xl font-extrabold tracking-wide md:text-4xl"
             style={{ fontFamily: '"Cinzel", serif' }}
           >
             QUAL SERÁ O PEDIDO PARA HOJE?
           </h2>
 
-          {/* LISTA DE PREÇOS */}
-          <div className="gap- grid w-full max-w-4xl grid-cols-1 text-lg font-semibold text-white md:grid-cols-2">
+          {/* LISTA DE PREÇOS COM ANIMAÇÃO */}
+          <div
+            ref={listRef}
+            className="reveal grid w-full max-w-4xl grid-cols-1 text-lg font-semibold text-white delay-200 md:grid-cols-2"
+          >
             <div className="space-y-8">
-              <div className="flex items-center justify-between border-b border-white/40 pb-2">
-                <span>CORTE</span>
-                <span>R$ 45,00</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-white/40 pb-2">
-                <span>BARBA</span>
-                <span>R$ 45,00</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-white/40 pb-2">
-                <span>SOBRANCELHA</span>
-                <span>R$ 15,00</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-white/40 pb-2">
-                <span>PIGMENTAÇÃO</span>
-                <span>R$ 40,00</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-white/40 pb-2">
-                <span>HIDRATAÇÃO</span>
-                <span>R$ 25,00</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-white/40 pb-2">
-                <span>SELAGEM</span>
-                <span>R$ 80,00</span>
-              </div>
+              {[
+                ["CORTE", "R$ 45,00"],
+                ["BARBA", "R$ 45,00"],
+                ["SOBRANCELHA", "R$ 15,00"],
+                ["PIGMENTAÇÃO", "R$ 40,00"],
+                ["HIDRATAÇÃO", "R$ 25,00"],
+                ["SELAGEM", "R$ 80,00"],
+              ].map(([name, price]) => (
+                <div
+                  key={name}
+                  className="flex items-center justify-between border-b border-white/40 pb-2"
+                >
+                  <span>{name}</span>
+                  <span>{price}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* BOTÃO CENTRALIZADO */}
+      {/* BOTÃO */}
       <div className="mt-1 flex justify-center py-5">
         <Button
           className="btn-entrando shine-button"
@@ -106,5 +103,3 @@ const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
     </div>
   )
 }
-
-export default BarbershopItem
