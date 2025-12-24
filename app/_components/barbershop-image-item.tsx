@@ -80,7 +80,7 @@ const BarbershopItem = ({ barbershop }: BarberShopImageItemProps) => {
       </div>
 
       {/* BOTÃO CENTRALIZADO */}
-      <div className="mt-6 mb-6 flex justify-center">
+      <div className="mt-1 flex justify-center py-5">
         <Button
           className="btn-entrando shine-button"
           style={{
