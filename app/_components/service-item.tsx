@@ -166,12 +166,12 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
     <>
       <Card className="py-3">
         <CardContent className="flex items-center gap-3 px-3">
-          <div className="relative h-[110px] w-[110px]">
+          <div className="relative max-h-[110px] min-h-[110px] max-w-[110px] min-w-[110px]">
             <Image
               alt={service.name}
               src={service.imageUrl}
               fill
-              className="rounded-xl object-cover"
+              className="rounded-lg object-cover"
             />
           </div>
 
