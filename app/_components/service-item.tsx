@@ -17,6 +17,7 @@ import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
+import { FaWhatsapp } from "react-icons/fa"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -84,6 +85,10 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
+  // 🔥 NOVO ESTADO (popup WhatsApp)
+  const [whatsappDialogOpen, setWhatsappDialogOpen] = useState(false)
+  const [confirmedDate, setConfirmedDate] = useState<Date | null>(null)
+
   useEffect(() => {
     const fetch = async () => {
       if (!selectedDay) return
@@ -120,23 +125,20 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
   }
 
   const openWhatsapp = () => {
-    if (!selectedDate || !data?.user) return
+    if (!confirmedDate || !data?.user) return
 
     const phone = "5593999034526"
-
-    const formattedDate = selectedDate.toLocaleDateString("pt-BR")
-    const formattedTime = selectedDate.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
 
     const message = `
 💈 *Novo Agendamento*
 
 👤 Cliente: ${data.user.name}
 ✂️ Serviço: ${service.name}
-📅 Data: ${formattedDate}
-⏰ Horário: ${formattedTime}
+📅 Data: ${confirmedDate.toLocaleDateString("pt-BR")}
+⏰ Horário: ${confirmedDate.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}
 💰 Valor: ${Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
@@ -145,11 +147,12 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 Obrigado pela preferência! 🙌
     `.trim()
 
-    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-      message,
-    )}`
+    window.open(
+      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+      "_blank",
+    )
 
-    window.open(whatsappUrl, "_blank")
+    router.push("/")
   }
 
   const handleCreateBooking = async () => {
@@ -161,14 +164,11 @@ Obrigado pela preferência! 🙌
         date: selectedDate,
       })
 
-      openWhatsapp()
+      setConfirmedDate(selectedDate)
       handleBookingSheetOpenChange()
+      setWhatsappDialogOpen(true)
 
       toast.success("Reserva criada com sucesso!")
-
-      setTimeout(() => {
-        router.push("/")
-      }, 500)
     } catch (error) {
       console.error(error)
       toast.error("Erro ao criar reserva!")
@@ -236,24 +236,18 @@ Obrigado pela preferência! 🙌
 
                     {selectedDay && (
                       <div className="mt-4 flex gap-2 overflow-x-auto border-b pb-3">
-                        {timeList.length > 0 ? (
-                          timeList.map((time) => (
-                            <Button
-                              key={time}
-                              variant={
-                                selectedTime === time ? "default" : "outline"
-                              }
-                              className="rounded-full"
-                              onClick={() => setSelectedTime(time)}
-                            >
-                              {time}
-                            </Button>
-                          ))
-                        ) : (
-                          <p className="text-xs">
-                            Não há horários disponíveis para este dia.
-                          </p>
-                        )}
+                        {timeList.map((time) => (
+                          <Button
+                            key={time}
+                            variant={
+                              selectedTime === time ? "default" : "outline"
+                            }
+                            className="rounded-full"
+                            onClick={() => setSelectedTime(time)}
+                          >
+                            {time}
+                          </Button>
+                        ))}
                       </div>
                     )}
 
@@ -284,6 +278,32 @@ Obrigado pela preferência! 🙌
           </div>
         </CardContent>
       </Card>
+
+      {/* 🔥 POPUP WHATSAPP (NOVA FUNÇÃO, SEM MEXER NO RESTO) */}
+      {/* 🔥 POPUP WHATSAPP (NOVA FUNÇÃO, SEM MEXER NO RESTO) */}
+      <Dialog open={whatsappDialogOpen}>
+        <DialogContent>
+          <div className="flex items-center justify-center gap-2">
+            <h2 className="text-center text-lg font-semibold">
+              Confirmar envio pelo WhatsApp
+            </h2>
+
+            <FaWhatsapp className="text-2xl text-green-500" />
+          </div>
+
+          <p className="text-center text-sm text-gray-500">
+            Seu agendamento já foi confirmado. Para finalizar, envie os detalhes
+            automaticamente pelo WhatsApp.
+          </p>
+
+          <Button
+            className="w-full bg-green-500 text-white hover:bg-green-600"
+            onClick={openWhatsapp}
+          >
+            Finalizar no WhatsApp
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={signInDiaLogIsOpen} onOpenChange={setSignInDialogIsOpen}>
         <DialogContent>
