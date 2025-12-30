@@ -62,9 +62,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
     const minutes = Number(time.split(":")[1])
 
     const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
-    if (timeIsOnThePast && isPast(selectedDay)) {
-      return false
-    }
+    if (timeIsOnThePast && isPast(selectedDay)) return false
 
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
@@ -72,17 +70,14 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
         booking.date.getMinutes() === minutes,
     )
 
-    if (hasBookingOnCurrentTime) {
-      return false
-    }
-
-    return true
+    return !hasBookingOnCurrentTime
   })
 }
 
 const ServiceItem = ({ service }: ServiceItemProps) => {
   const { data } = useSession()
   const router = useRouter()
+
   const [signInDiaLogIsOpen, setSignInDialogIsOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState<Date | undefined>()
   const [selectedTime, setSelectedTime] = useState<string | undefined>()
@@ -104,8 +99,8 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
     return set(selectedDay, {
-      hours: Number(selectedTime?.split(":")[0]),
-      minutes: Number(selectedTime?.split(":")[1]),
+      hours: Number(selectedTime.split(":")[0]),
+      minutes: Number(selectedTime.split(":")[1]),
     })
   }, [selectedDay, selectedTime])
 
@@ -124,12 +119,37 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
     setBookingSheetIsOpen(false)
   }
 
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDay(date)
-  }
+  const openWhatsapp = () => {
+    if (!selectedDate || !data?.user) return
 
-  const handleTimeSelect = (time: string | undefined) => {
-    setSelectedTime(time)
+    const phone = "5593999034526"
+
+    const formattedDate = selectedDate.toLocaleDateString("pt-BR")
+    const formattedTime = selectedDate.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+
+    const message = `
+💈 *Novo Agendamento*
+
+👤 Cliente: ${data.user.name}
+✂️ Serviço: ${service.name}
+📅 Data: ${formattedDate}
+⏰ Horário: ${formattedTime}
+💰 Valor: ${Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(Number(service.price))}
+
+Obrigado pela preferência! 🙌
+    `.trim()
+
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+      message,
+    )}`
+
+    window.open(whatsappUrl, "_blank")
   }
 
   const handleCreateBooking = async () => {
@@ -141,13 +161,14 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
         date: selectedDate,
       })
 
+      openWhatsapp()
       handleBookingSheetOpenChange()
-      toast.success("Reserva criada com sucesso!", {
-        action: {
-          label: "Ver agendamentos",
-          onClick: () => router.push("/bookings"),
-        },
-      })
+
+      toast.success("Reserva criada com sucesso!")
+
+      setTimeout(() => {
+        router.push("/")
+      }, 500)
     } catch (error) {
       console.error(error)
       toast.error("Erro ao criar reserva!")
@@ -156,10 +177,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
 
   const timeList = useMemo(() => {
     if (!selectedDay) return []
-    return getTimeList({
-      bookings: dayBookings,
-      selectedDay,
-    })
+    return getTimeList({ bookings: dayBookings, selectedDay })
   }, [dayBookings, selectedDay])
 
   return (
@@ -200,25 +218,24 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                 </Button>
 
                 <SheetContent className="flex max-h-dvh w-[84%] flex-col p-0">
-                  <div className="overflow-y-auto px-3 pb-24 [-webkit-overflow-scrolling:touch]">
+                  <div className="overflow-y-auto px-3 pb-24">
                     <SheetTitle className="mt-2 text-center font-bold text-[#FFD700]">
                       Fazer reserva
                     </SheetTitle>
 
                     <div className="mt-1 border-b pb-3">
                       <Calendar
-                        className="w-full origin-top scale-[1.03] overflow-hidden"
+                        className="w-full"
                         mode="single"
                         locale={ptBR}
-                        buttonVariant="outline"
                         selected={selectedDay}
-                        onSelect={handleDateSelect}
+                        onSelect={setSelectedDay}
                         disabled={(date) => date < today}
                       />
                     </div>
 
                     {selectedDay && (
-                      <div className="mt-4 flex gap-2 overflow-x-auto border-b pb-3 [&::-webkit-scrollbar]:hidden">
+                      <div className="mt-4 flex gap-2 overflow-x-auto border-b pb-3">
                         {timeList.length > 0 ? (
                           timeList.map((time) => (
                             <Button
@@ -227,7 +244,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
                                 selectedTime === time ? "default" : "outline"
                               }
                               className="rounded-full"
-                              onClick={() => handleTimeSelect(time)}
+                              onClick={() => setSelectedTime(time)}
                             >
                               {time}
                             </Button>
@@ -268,10 +285,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
         </CardContent>
       </Card>
 
-      <Dialog
-        open={signInDiaLogIsOpen}
-        onOpenChange={(open) => setSignInDialogIsOpen(open)}
-      >
+      <Dialog open={signInDiaLogIsOpen} onOpenChange={setSignInDialogIsOpen}>
         <DialogContent>
           <SignInDialog />
         </DialogContent>
